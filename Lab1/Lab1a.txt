@@ -1,0 +1,86 @@
+p1.compute de min of 3 numbers
+
+integer a;
+integer b;
+integer c;
+read(a);
+read(b);
+read(c);
+verify(a < b AND a < c){
+	print(a);
+} otherwise {
+	verify (b < a AND b < c){
+		print(b);
+	} otherwise {
+		print(c);
+	  }
+ }
+
+
+
+
+p2.verify if a number is prime
+
+integer n ;
+integer isPrime;
+integer i;
+read(n);
+isPrime = 1;
+verify(n < 2){
+	isPrime = 0;
+}otherwise{
+ 	verify(n == 2){
+		isPrime = 1;
+	} otherwise {
+		 verify(n % 2 == 0){
+			isPrime = 0;
+		}
+	}
+}
+loopFor(i = 3; i*i <= n AND isPrime == 1; i = i+2){
+	verify(n % i == 0){
+	    isPrime = 0;
+	}
+}
+
+verify(isPrime == 1){
+	print("prime");
+} otherwise{
+	print("not prime");
+}
+
+
+p3. compute the sum of n numbers
+integer n ;
+integer sum;
+integer i;
+integer a;
+read(n);
+i = 0;
+sum = 0;
+
+loopWhile(i < n){
+	read(a);
+	sum = sum + a;
+	i = i+1;
+}
+
+print("Sum is ");
+print(sum);
+
+p1err.contains 2 types of lexical errors
+integer a;
+integer b;
+integer ^c;
+read(a);
+read(b);
+read(^c);
+7verify(a < b AND a < ^c){
+	print(a);
+} otherwise {
+	 verify (b < a AND b < ^c){
+		print(b);
+	} otherwise {
+		print(^c);
+	  }
+}
