@@ -1,0 +1,39 @@
+Alphabet:
+a) Upper and lower case letters of the English alphabet: 
+	a-z
+	A-Z
+
+b) Decimal digits:
+	0-9
+
+-----------------------------------------------------------------------------------------------------
+
+Lexic:
+a) Special symbols:
+	1. operators: + - * / % < > <= >= == = != AND OR 
+
+	2. separators: ( ) [ ] { } , ; " space newline
+
+	3. reserved keywords: integer string verify otherwise loopFor loopWhile read print 
+
+b) Identifiers
+	-a sequence of letters and digits, such that the first character is a letter, the rule is:
+
+	<identifier>::= <letter> | <letter><seq-letter-digit>
+	<seq_letter_digit> ::= <letter_digit> | <letter_digit><seq_letter_digit>
+	<letter_digit> ::= <letter> | <digit>
+	<letter> ::= a | b | ... | z | A | B | ... | Z
+	<digit> ::= 0 | 1 | ... | 9
+
+c) Constants
+	1. Integer - rule is:
+	<const_integer> ::= 0 | <number> | +<number> | -<number>
+	<number> ::= <nonzerodigit> | <nonzerodigit><digit_seq>
+	<digit_seq> ::= <digit> | <digit><digit_seq>
+	<nonzerodigit> ::= 1 | 2 | ... | 9
+
+	2. String - rule is:
+	<const_string> ::= ""|"<string>"
+	<string> ::= <char> | <char><string>
+	<char> ::= <letter>|<digit>|space //added space in string representation
+

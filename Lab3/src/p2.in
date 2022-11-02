@@ -1,0 +1,27 @@
+integer n;
+integer isPrime;
+integer i;
+read(n);
+isPrime = 1;
+verify(n < +2){
+	isPrime = 0;
+}otherwise{
+ 	verify(n == 2){
+		isPrime = 1;
+	} otherwise {
+		 verify(n % 2 == 0){
+			isPrime = 0;
+		}
+	}
+}
+loopFor(i = 3; i*i <= n AND isPrime == 1; i = i +2){
+	verify(n % i == 0){
+	    isPrime = 0;
+	}
+}
+
+verify(isPrime == 1){
+	print("prime");
+} otherwise{
+	print("not prime");
+}

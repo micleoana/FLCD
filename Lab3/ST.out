@@ -1,0 +1,13 @@
+ST implemented using hash table
+
+POS  SYMBOL
+0  2
+1  3
+5  i
+9  "prime"
+10  n
+28  "not prime"
+29  isPrime
+43  +2
+48  0
+49  1
