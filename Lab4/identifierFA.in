@@ -1,0 +1,5 @@
+Q=p,q
+E=a,b,c,d,A,B,C,D,0,1,2,3
+q0=p
+F=q
+T=(p;a;q),(p;b;q),(p;c;q),(p;d;q),(p;A;q),(p;B;q),(p;C;q),(p;D;q),(q;a;q),(q;b;q),(q;c;q),(q;d;q),(q;A;q),(q;B;q),(q;C;q),(q;D;q),(q;0;q),(q;1;q),(q;2;q),(q;3;q)

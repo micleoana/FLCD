@@ -1,0 +1,15 @@
+integer aA3;
+integer b;
+integer c;
+read(aA3);
+read(b);
+read(c);
+verify(aA3 < b AND a < c){
+	print(a);
+} otherwise {
+	verify (b < a AND b < c){
+		print(b);
+	} otherwise {
+		print(c);
+	  }
+ }

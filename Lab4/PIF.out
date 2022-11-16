@@ -1,6 +1,6 @@
 TOKEN  ST_POS
 integer   -1
-identifier   47
+identifier   13
 ;   -1
 integer   -1
 identifier   48
@@ -10,7 +10,7 @@ identifier   49
 ;   -1
 read   -1
 (   -1
-identifier   47
+identifier   13
 )   -1
 ;   -1
 read   -1
@@ -25,7 +25,7 @@ identifier   49
 ;   -1
 verify   -1
 (   -1
-identifier   47
+identifier   13
 <   -1
 identifier   48
 AND   -1

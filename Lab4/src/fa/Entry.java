@@ -1,3 +1,5 @@
+package fa;
+
 import java.util.Objects;
 
 public class Entry {
@@ -13,23 +15,21 @@ public class Entry {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public String getValue() {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
 
     @Override
     public boolean equals(Object o){
-        if (!(o instanceof Entry e))
+       if (!(o instanceof Entry e))
             return false;
         return Objects.equals(this.key, e.getKey()) && Objects.equals(this.value, e.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(key, value);
     }
 
     @Override
