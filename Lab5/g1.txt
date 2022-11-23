@@ -1,0 +1,4 @@
+N=A,B,C,D
+E=+,*,(,),a
+S=A
+P = A->BC, C->+BC|epsilon, B->FD, D->*FD|epsilon, F -> a|(A)
