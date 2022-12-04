@@ -7,7 +7,7 @@ public class Grammar {
     private List<String> nonTerminals;
     private List<String> terminals;
     private String startSymbol;
-    private Map<List<String>, List<List<String>>> productions;
+    private Map<String, List<List<String>>> productions;
     private String inputFile;
 
 
@@ -25,13 +25,38 @@ public class Grammar {
         File input = new File(inputFile);
         Scanner scanner = new Scanner(input);
         while (scanner.hasNext()) {
-            String[] tokens = scanner.nextLine().split("=");
-            switch (tokens[0]) {
-                case "N" -> nonTerminals = Arrays.stream(tokens[1].split(",")).toList();
-                case "E" -> terminals = Arrays.stream(tokens[1].split(",")).toList();
+            String[] tokens = scanner.nextLine().split("=",2);
+            switch (tokens[0].strip()) {
+                case "N" -> {
+                    nonTerminals = Arrays.stream(tokens[1].strip().split(",")).toList();
+                }
+                case "E" -> {
+                    terminals = Arrays.stream(tokens[1].split(" ")).toList();
+                }
                 case "S" -> startSymbol = tokens[1].trim();
+                default -> {
+                        String[] components = tokens[0].strip().split("->");
+                        String nonTerminal = components[0].strip();
+                        String[] result = components[1].strip().split("\\|");
+                        if (!nonTerminals.contains(nonTerminal)){
+                            System.out.println(nonTerminal);
+                            throw new RuntimeException("Grammar def: invalid production element");
+                        }
+
+                        if (!productions.containsKey(nonTerminal))
+                            productions.put(nonTerminal, new ArrayList<>());
+                        for (String elem : result)
+                            productions.get(nonTerminal).add(List.of(elem.split(" ")));
+                }
             }
         }
+    }
+
+    public boolean checkCFG() {
+        for (String nonterminal : productions.keySet())
+            if (nonterminal.contains(" "))
+                return false;
+        return true;
     }
 
     public List<String> getNonTerminals() {
@@ -46,7 +71,11 @@ public class Grammar {
         return startSymbol;
     }
 
-    public Map<List<String>, List<List<String>>> getProductions() {
+    public Map<String, List<List<String>>> getProductions() {
         return productions;
+    }
+
+    public List<List<String>> getProductionsForNonterminal(String nonterminal) {
+        return productions.get(nonterminal);
     }
 }

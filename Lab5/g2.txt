@@ -1,0 +1,38 @@
+N =program,stmt_list,stmt,var_decl_stmt,identifier_list,type,simple_type,array,assignment_stmt,expression_type,integer_expression,term,factor,string_expression,string_factor,io_stmt,if_stmt,while_stmt,for_stmt,condition_list,condition,relation,logical_op,identifier,seq_letter_digit,letter_digit,digit,letter,const_integer,number,digit_seq,nonzerodigit,const_string,string,char
+E= + - * / % < > <= >= == = != AND OR ( ) [ ] { } , ; "
+S =program
+program -> stmt_list
+stmt_list -> stmt | stmt stmt_list
+stmt -> var_decl_stmt|assignment_stmt|io_stmt|if_stmt|while_stmt|for_stmt
+var_decl_stmt -> type identifier_list
+identifier_list -> identifier|identifier identifier_list
+type -> simple_type | array
+simple_type -> integer | string
+array -> simple_type [ const_integer ]
+assignment_stmt->identifier = expression_type
+expression_type ->integer_expression |string_expression
+integer_expression-> integer_expression + term | integer_expression - term | term
+term -> term * factor | term / factor | term % factor | factor
+factor -> ( integer_expression ) | identifier | const_integer
+string_expression -> string_expression + string_factor | string_factor
+string_factor -> ( string_expression ) | identifier | const_string
+io_stmt -> read ( identifier ) | print ( identifier ) | print ( expression_type )
+if_stmt -> verify ( condition_list ) { stmt_list } | verify ( condition_list ) { stmt_list } otherwise { stmt_list }
+while_stmt -> loopWhile ( condition_list ) { stmt_list }
+for_stmt -> loopFor ( assignment_stmt ; condition ; assignment_stmt ) { stmt_list }
+condition_list -> condition | condition logical_op condition_list
+condition -> expression relation expression
+relation -> < | > | <= | >= | == | !=
+logical_op -> AND | OR
+identifier-> letter | letter seq-letter-digit
+seq_letter_digit -> letter_digit | letter_digit seq_letter_digit
+letter_digit -> letter | digit
+digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7| 8 | 9
+letter->A | B | C | D | E | F| G| H| I| J| K| L| M| N| O| P| Q |R |S |T |U |V |W |X |Y |Z| a |b |c |d |e |f |g |h |i |j |k |l |m |n |o |p |q |r |s |t| u| v| w| x| y| z
+const_integer -> 0 | number | + number | - number
+number -> nonzerodigit | nonzerodigit digit_seq
+digit_seq -> digit | digit digit_seq
+nonzerodigit ->  1 | 2 | 3 | 4 | 5 | 6 | 7| 8 | 9
+const_string -> "   "|" string "
+string -> char | char string
+char -> letter|digit
