@@ -6,13 +6,15 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        Grammar grammar = new Grammar("C:\\Users\\16112001\\IdeaProjects\\FLCD\\Lab5\\g2.txt");
+        Grammar grammar = new Grammar("C:\\Users\\16112001\\IdeaProjects\\FLCD\\Lab5\\g1.txt");
         try {
             grammar.initGrammar();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
+        Parser p = new Parser(grammar);
+        System.out.println(p.getFirstForNonterminals());
+        System.out.println(p.getFollowForNonterminals());
         Scanner scanner = new Scanner(System.in);
 
         while (true) {

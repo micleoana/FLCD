@@ -1,5 +1,5 @@
 N =program,stmt_list,stmt,var_decl_stmt,identifier_list,type,simple_type,array,assignment_stmt,expression_type,integer_expression,term,factor,string_expression,string_factor,io_stmt,if_stmt,while_stmt,for_stmt,condition_list,condition,relation,logical_op,identifier,seq_letter_digit,letter_digit,digit,letter,const_integer,number,digit_seq,nonzerodigit,const_string,string,char
-E= + - * / % < > <= >= == = != AND OR ( ) [ ] { } , ; "
+E= + - * / % < > <= >= == = != AND OR ( ) [ ] { } , ; " otherwise loopFor loopWhile verify read print 0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z
 S =program
 program -> stmt_list
 stmt_list -> stmt | stmt stmt_list
@@ -21,10 +21,10 @@ if_stmt -> verify ( condition_list ) { stmt_list } | verify ( condition_list ) {
 while_stmt -> loopWhile ( condition_list ) { stmt_list }
 for_stmt -> loopFor ( assignment_stmt ; condition ; assignment_stmt ) { stmt_list }
 condition_list -> condition | condition logical_op condition_list
-condition -> expression relation expression
+condition -> expression_type relation expression_type
 relation -> < | > | <= | >= | == | !=
 logical_op -> AND | OR
-identifier-> letter | letter seq-letter-digit
+identifier-> letter | letter seq_letter_digit
 seq_letter_digit -> letter_digit | letter_digit seq_letter_digit
 letter_digit -> letter | digit
 digit -> 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7| 8 | 9
