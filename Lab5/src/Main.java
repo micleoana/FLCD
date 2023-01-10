@@ -1,8 +1,8 @@
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -15,6 +15,9 @@ public class Main {
         Parser p = new Parser(grammar);
         System.out.println(p.getFirstForNonterminals());
         System.out.println(p.getFollowForNonterminals());
+        List<String> sequence = new ArrayList<>(List.of("a","*","(","a","+","a",")"));
+        ParserOutput parserOutput = new ParserOutput(p,grammar,sequence,"C:\\Users\\16112001\\IdeaProjects\\FLCD\\Lab5\\out.txt");
+        parserOutput.printTree();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
