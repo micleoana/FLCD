@@ -1,97 +1,72 @@
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Stack;
 
 public class ParserOutput {
-    private Parser parser;
     private Grammar grammar;
     private List<Integer> productions;
-    private Integer nodeNumber = 1;
-    private Boolean hasErrors;
-    private List<Node> nodeList = new ArrayList<>();
-    private Node root;
-    private String outputFile;
+    private List<Node> tree = new ArrayList<>();
 
-    public ParserOutput(Parser parser,Grammar grammar, List<String> sequence, String outputFile){
-        this.parser = parser;
+    public ParserOutput(List<Integer> productionsIndexList, Grammar grammar) {
         this.grammar = grammar;
-        this.productions = parser.parseSequence(sequence);
-        this.hasErrors = this.productions.contains(-1);
-        this.outputFile = outputFile;
-        generateTree();
+        this.productions = productionsIndexList;
+        buildParseTree();
     }
 
-    public void generateTree(){
-        if(hasErrors)
-            return;
+    public void buildParseTree() {
 
-        Stack<Node> nodeStack = new Stack<>();
-        var productionsIndex = 0;
-        //root
-        Node node = new Node();
-        node.setParent(0);
-        node.setSibling(0);
-        node.setHasRight(false);
-        node.setIndex(nodeNumber);
-        nodeNumber++;
-        node.setValue(grammar.getStartSymbol());
-        nodeStack.push(node);
-        nodeList.add(node);
-        this.root = node;
+        Stack<Node> nodes = new Stack<>();
+        int currentNodeIndex = 1;
+        Node node = new Node(currentNodeIndex,grammar.getStartSymbol(),0,0);
+        nodes.push(node);
+        tree.add(node);
+        currentNodeIndex++;
 
-        while(productionsIndex < productions.size() && !nodeStack.isEmpty()){
-            Node currentNode = nodeStack.peek(); //father
-            if(grammar.getTerminals().contains(currentNode.getValue()) || currentNode.getValue().contains("epsilon")){
-                while(nodeStack.size()>0 && !nodeStack.peek().getHasRight()) {
-                    nodeStack.pop();
+        for (int currentProd=0;currentProd < productions.size() && !nodes.isEmpty();currentProd++) {
+            Node currentNode = nodes.peek();
+            if (grammar.getTerminals().contains(currentNode.getInfo()) || currentNode.getInfo().contains("epsilon")) {
+                while (nodes.size() > 0 && nodes.peek().getSibling() == 0) {
+                    nodes.pop();
                 }
-                if(nodeStack.size() > 0)
-                    nodeStack.pop();
-                else
-                    break;
-                continue;
+            }
+            currentNode = nodes.peek();
+
+            List<String> production = grammar.getProductionsRHSOrdered().get(productions.get(currentProd) - 1);
+            if (production.contains("epsilon") && production.size() > 1)
+                production.remove(1);
+            List<Node> children= new ArrayList<>();
+            children.add(new Node(currentNodeIndex,production.get(0),currentNode.getIndex(),0));
+            currentNodeIndex++;
+            for (int i = 1;i<production.size();i++){
+                children.add(new Node(currentNodeIndex,production.get(i),currentNode.getIndex(),currentNodeIndex-1));
+                currentNodeIndex++;
             }
 
-            //children
-            var production = grammar.getProductionsRHSOrdered().get(productions.get(productionsIndex)-1);
-            nodeNumber+=production.size()-1;
-            for(var i=production.size()-1;i>=0;--i){
-                Node child = new Node();
-                child.setParent(currentNode.getIndex());
-                child.setValue(production.get(i));
-                child.setIndex(nodeNumber);
-                if(i==0)
-                    child.setSibling(0);
-                else
-                    child.setSibling(nodeNumber-1);
-                child.setHasRight(i != production.size() - 1);
-
-                nodeNumber--;
-                nodeStack.push(child);
-                nodeList.add(child);
+            for (int i = children.size()-1;i>=0;i--){
+                nodes.push(children.get(i));
+                tree.add(children.get(i));
             }
-            nodeNumber+=production.size()+1;
-            productionsIndex++;
         }
     }
 
-    public void printTree(){
+    public void writeToFile() {
         try {
-            nodeList.sort(Comparator.comparing(Node::getIndex));
-            File file = new File(outputFile);
-            FileWriter fileWriter = new FileWriter(file, false);
-            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            FileWriter outWriter = new FileWriter("C:\\Users\\16112001\\IdeaProjects\\FLCD\\Lab5\\out.txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(outWriter);
 
-            bufferedWriter.write("Index | Value | Parent | Sibling"+ "\n");
-            for (Node node : nodeList) {
-                bufferedWriter.write(node.getIndex() + " | " + node.getValue() + " | " + node.getParent() + " | " + node.getSibling() + "\n");
+            bufferedWriter.write("Index\t\tInfo\t\tParent\t\tRight sibling" + "\n");
+            for (int i = 1; i <= tree.size(); i++) {
+                for (Node node : tree)
+                    if (node.getIndex() == i) {
+                        if (node.getInfo().equals("epsilon"))
+                            node.setInfo("ε");
+                        bufferedWriter.write(node.getIndex() + "\t\t\t" + node.getInfo() + "\t\t\t" + node.getParent() + "\t\t\t" + node.getSibling() + "\n");
+                    }
             }
             bufferedWriter.close();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

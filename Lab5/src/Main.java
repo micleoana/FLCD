@@ -13,11 +13,6 @@ public class Main {
             e.printStackTrace();
         }
         Parser p = new Parser(grammar);
-        System.out.println(p.getFirstForNonterminals());
-        System.out.println(p.getFollowForNonterminals());
-        List<String> sequence = new ArrayList<>(List.of("a","*","(","a","+","a",")"));
-        ParserOutput parserOutput = new ParserOutput(p,grammar,sequence,"C:\\Users\\16112001\\IdeaProjects\\FLCD\\Lab5\\out.txt");
-        parserOutput.printTree();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -26,6 +21,7 @@ public class Main {
             System.out.println("3. Print productions");
             System.out.println("4. Print productions for a nonterminal");
             System.out.println("5. Check CFG");
+            System.out.println("6. Parse sequence");
             System.out.println("0. Exit\n");
             System.out.print("Enter option: ");
             int input = Integer.parseInt(scanner.nextLine());
@@ -61,6 +57,17 @@ public class Main {
                         System.out.println("Is CFG");
                     else
                         System.out.println("Not CFG");
+                }
+                case 6 ->{
+                    List<String> sequence = new ArrayList<>(List.of("a","*","(","a","+","a",")"));
+                    List<Integer> productionsIndexList = p.parseSequence(sequence);
+                    System.out.println(productionsIndexList);
+                    if (productionsIndexList.contains(-1))
+                        System.out.println("Sequence not accepted");
+                    else {
+                        ParserOutput parserOutput = new ParserOutput(productionsIndexList,grammar);
+                        parserOutput.writeToFile();
+                    }
                 }
             }
         }

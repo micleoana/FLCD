@@ -57,6 +57,7 @@ public class Grammar {
                 }
             }
         }
+        System.out.println(productionsRHSOrdered);
     }
 
     public boolean checkCFG() {

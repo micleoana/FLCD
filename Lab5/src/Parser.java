@@ -4,7 +4,6 @@ public class Parser {
     private HashMap<String, Set<String>> firstForNonterminals;
     private HashMap<String, Set<String>> followForNonterminals;
     private Grammar grammar;
-    private List<List<String>> productionsRhs;
     private HashMap<Map.Entry<String, String>, Map.Entry<String, Integer>> parseTable;
 
 
@@ -164,8 +163,8 @@ public class Parser {
 
         parseTable.put(Map.entry("$", "$"), Map.entry("acc", -1));
 
-        var productions = grammar.getProductions();
-        this.productionsRhs = grammar.getProductionsRHSOrdered();
+        Map<String, List<List<String>>> productions = grammar.getProductions();
+        List<List<String>> productionsR = grammar.getProductionsRHSOrdered();
 
         productions.forEach((key, v) -> {
 
@@ -173,36 +172,30 @@ public class Parser {
                 var firstSymbol = production.get(0);
                 if (grammar.getTerminals().contains(firstSymbol))
                     if (parseTable.get(Map.entry(key, firstSymbol)).getKey().equals("err"))
-                        parseTable.put(Map.entry(key, firstSymbol), Map.entry(String.join(" ", production), productionsRhs.indexOf(production) + 1));
+                        parseTable.put(Map.entry(key, firstSymbol), Map.entry(String.join(" ", production), productionsR.indexOf(production) + 1));
                     else {
-                        try {
-                            throw new IllegalAccessException("CONFLICT: Pair " + key + "," + firstSymbol);
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                        }
+                        System.out.println("CONFLICT: Pair " + key + "," + firstSymbol);
+                        break;
                     }
                 else if (grammar.getNonTerminals().contains(firstSymbol)) {
                     if (production.size() == 1)
                         for (var symbol : firstForNonterminals.get(firstSymbol))
                             if (parseTable.get(Map.entry(key, symbol)).getKey().equals("err"))
-                                parseTable.put(Map.entry(key, symbol), Map.entry(String.join(" ", production), productionsRhs.indexOf(production) + 1));
+                                parseTable.put(Map.entry(key, symbol), Map.entry(String.join(" ", production), productionsR.indexOf(production) + 1));
                             else {
-                                try {
-                                    throw new IllegalAccessException("CONFLICT: Pair " + key + "," + symbol);
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                }
+                                System.out.println("CONFLICT: Pair " + key + "," + symbol);
+                                break;
                             }
                     else {
-                        var i = 1;
-                        var nextSymbol = production.get(1);
-                        var firstSetForProduction = firstForNonterminals.get(firstSymbol);
+                        int i = 1;
+                        String nextSymbol = production.get(1);
+                        Set<String> firstSetForFirstSymbol = firstForNonterminals.get(firstSymbol);
 
                         while (i < production.size() && grammar.getNonTerminals().contains(nextSymbol)) {
-                            var firstForNext = firstForNonterminals.get(nextSymbol);
-                            if (firstSetForProduction.contains("epsilon")) {
-                                firstSetForProduction.remove("epsilon");
-                                firstSetForProduction.addAll(firstForNext);
+                            var firstSetForNextSymbol = firstForNonterminals.get(nextSymbol);
+                            if (firstSetForFirstSymbol.contains("epsilon")) {
+                                firstSetForFirstSymbol.remove("epsilon");
+                                firstSetForFirstSymbol.addAll(firstSetForNextSymbol);
                             }
 
                             i++;
@@ -210,17 +203,14 @@ public class Parser {
                                 nextSymbol = production.get(i);
                         }
 
-                        for (var symbol : firstSetForProduction) {
+                        for (var symbol : firstSetForFirstSymbol) {
                             if (symbol.equals("epsilon"))
                                 symbol = "$";
                             if (parseTable.get(Map.entry(key, symbol)).getKey().equals("err"))
-                                parseTable.put(Map.entry(key, symbol), Map.entry(String.join(" ", production), productionsRhs.indexOf(production) + 1));
+                                parseTable.put(Map.entry(key, symbol), Map.entry(String.join(" ", production), productionsR.indexOf(production) + 1));
                             else {
-                                try {
-                                    throw new IllegalAccessException("CONFLICT: Pair " + key + "," + symbol);
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                }
+                                System.out.println("CONFLICT: Pair " + key + "," + symbol);
+                                break;
                             }
                         }
                     }
@@ -230,23 +220,17 @@ public class Parser {
                         if (symbol.equals("epsilon")) {
                             if (parseTable.get(Map.entry(key, "$")).getKey().equals("err")) {
                                 var prod = new ArrayList<>(List.of("epsilon", key));
-                                parseTable.put(Map.entry(key, "$"), Map.entry("epsilon", productionsRhs.indexOf(prod) + 1));
+                                parseTable.put(Map.entry(key, "$"), Map.entry("epsilon", productionsR.indexOf(prod) + 1));
                             } else {
-                                try {
-                                    throw new IllegalAccessException("CONFLICT: Pair " + key + "," + symbol);
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                }
+                                System.out.println("CONFLICT: Pair " + key + "," + symbol);
+                                break;
                             }
                         } else if (parseTable.get(Map.entry(key, symbol)).getKey().equals("err")) {
                             var prod = new ArrayList<>(List.of("epsilon", key));
-                            parseTable.put(Map.entry(key, symbol), Map.entry("epsilon", productionsRhs.indexOf(prod) + 1));
+                            parseTable.put(Map.entry(key, symbol), Map.entry("epsilon", productionsR.indexOf(prod) + 1));
                         } else {
-                            try {
-                                throw new IllegalAccessException("CONFLICT: Pair " + key + "," + symbol);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
+                            System.out.println("CONFLICT: Pair " + key + "," + symbol);
+                            break;
                         }
                     }
                 }
@@ -260,10 +244,6 @@ public class Parser {
 
     public HashMap<String, Set<String>> getFollowForNonterminals() {
         return followForNonterminals;
-    }
-
-    public HashMap<Map.Entry<String, String>, Map.Entry<String, Integer>> getParseTable() {
-        return parseTable;
     }
 
     public List<Integer> parseSequence(List<String> sequence) {
@@ -298,7 +278,7 @@ public class Parser {
                     result.add(value.getValue());
                 }
             } else {
-                System.out.println("Syntax error for key " + key);
+                System.out.println("Syntax error for key " + key.getKey()+", "+key.getValue());
                 System.out.println("Current alpha and beta for sequence parsing:");
                 System.out.println(alpha);
                 System.out.println(beta);
@@ -306,6 +286,7 @@ public class Parser {
                 return result;
             }
         }
+        System.out.println("Sequence accepted");
         return result;
     }
 }

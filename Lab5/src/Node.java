@@ -1,9 +1,15 @@
 public class Node {
-    private Integer parent;
-    private String value;
     private Integer index;
+    private String info;
+    private Integer parent;
     private Integer sibling;
-    private Boolean hasRight;
+
+    public Node(Integer index, String info, Integer parent, Integer sibling) {
+        this.info = info;
+        this.index = index;
+        this.parent = parent;
+        this.sibling = sibling;
+    }
 
     public Integer getParent() {
         return parent;
@@ -13,12 +19,12 @@ public class Node {
         this.parent = parent;
     }
 
-    public String getValue() {
-        return value;
+    public String getInfo() {
+        return info;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     public Integer getIndex() {
@@ -37,11 +43,13 @@ public class Node {
         this.sibling = sibling;
     }
 
-    public Boolean getHasRight() {
-        return hasRight;
-    }
-
-    public void setHasRight(Boolean hasRight) {
-        this.hasRight = hasRight;
+    @Override
+    public String toString() {
+        return "Node{" +
+                "index=" + index +
+                ", info='" + info + '\'' +
+                ", parent=" + parent +
+                ", sibling=" + sibling +
+                '}';
     }
 }
