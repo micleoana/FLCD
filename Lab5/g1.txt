@@ -1,8 +1,0 @@
-N=A,B,C,D,S
-E=+ * ( ) a
-S=S
-S->B A
-A->+ B A|epsilon
-B->D C
-C->* D C|epsilon
-D->a|( S )
