@@ -10,6 +10,6 @@ verify(a < b AND a < c){
 	 verify (b < a AND b < c){
 		print(b);
 	} otherwise {
-		print(c);
+		print(c)
 	  }
 }

@@ -57,12 +57,12 @@ identifier_list : IDENTIFIER|IDENTIFIER COMMA identifier_list
 type : simple_type | array
 simple_type : INT | STRING
 array : simple_type OBRACKET INTCONST CBRACKET
-assignment_stmt : IDENTIFIER A expression SEMICOLON
+assignment_stmt : IDENTIFIER A expression
 expression: expression PLUS term | expression MINUS term | term
 term : term MUL factor | term DIV factor | term MOD factor | factor
 factor : ROBRACKET expression RCBRACKET | const | IDENTIFIER
 const: INTCONST | STRCONST
-io_stmt : READ ROBRACKET IDENTIFIER RCBRACKET SEMICOLON | PRINT ROBRACKET IDENTIFIER RCBRACKET SEMICOLON| PRINT ROBRACKET expression RCBRACKET SEMICOLON
+io_stmt : READ ROBRACKET IDENTIFIER RCBRACKET SEMICOLON | PRINT ROBRACKET expression RCBRACKET SEMICOLON
 if_stmt : VERIFY ROBRACKET condition_list RCBRACKET COBRACKET stmt_list CCBRACKET | VERIFY ROBRACKET condition_list RCBRACKET COBRACKET stmt_list CCBRACKET OTHERWISE COBRACKET stmt_list CCBRACKET
 while_stmt : WHILE ROBRACKET condition_list RCBRACKET COBRACKET stmt_list CCBRACKET
 for_stmt : FOR ROBRACKET assignment_stmt SEMICOLON condition_list SEMICOLON assignment_stmt RCBRACKET COBRACKET stmt_list CCBRACKET

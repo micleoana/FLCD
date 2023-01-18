@@ -3,13 +3,13 @@ integer sum;
 integer i;
 integer a;
 read(n);
-i = 0;
-sum = 0;
+i = 0
+sum = 0
 
 loopWhile(i < n){
 	read(a);
-	sum = sum + a;
-	i = i+1;
+	sum = sum + a
+	i = i + 1
 }
 
 print("Sum is ");
